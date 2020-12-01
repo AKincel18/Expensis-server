@@ -314,4 +314,7 @@ fabric.properties
 
 # profiling data
 
+# Database config file
+Expensis/database_config.py
+
 # End of https://www.toptal.com/developers/gitignore/api/python,pycharm,django
