@@ -1,5 +1,5 @@
 DATABASE_CONFIG = {
-    'ENGINE': 'django.db.backends.postgresql_psycopg2',
+    'ENGINE': 'django.db.backends.postgresql',
     'NAME': 'NAME',  # set database name
     'USER': 'postgres',
     'PASSWORD': 'PASSWORD',  # set database password
