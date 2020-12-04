@@ -3,7 +3,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from users.serializers import UserSerializerBase, UserSerializerIdNoPassword, UserSerializerNoPassword
+from users.serializers import UserSerializerPost, UserSerializerGet, UserSerializerPut
 from users.service import get_user_by_id
 
 
@@ -12,11 +12,11 @@ class SaveUser(APIView):
     """ create user """
 
     def post(self, request):
-        serializer = UserSerializerBase(data=request.data)
+        serializer = UserSerializerPost(data=request.data)
         if serializer.is_valid():
             serializer.hash_password()
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            save_response = serializer.save()
+            return Response(UserSerializerGet(save_response).data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -25,22 +25,22 @@ class UserDetail(APIView):
     """ get user by id """
 
     def get(self, request, user_id):
-        serializer = UserSerializerIdNoPassword(get_user_by_id(user_id))
+        serializer = UserSerializerGet(get_user_by_id(user_id))
         return Response(serializer.data)
 
     """ update user """
 
     def put(self, request, user_id):
-        serializer = UserSerializerBase(get_user_by_id(user_id), data=request.data)
+        serializer = UserSerializerPost(get_user_by_id(user_id), data=request.data)
         if serializer.is_valid():
             serializer.hash_password()
-            serializer.save()
-            return Response(serializer.data)
+            save_response = serializer.save()
+            return Response(UserSerializerGet(save_response).data)
         else:
-            serializer = UserSerializerNoPassword(get_user_by_id(user_id), data=request.data)
+            serializer = UserSerializerPut(get_user_by_id(user_id), data=request.data)
             if serializer.is_valid():
-                serializer.save()
-                return Response(serializer.data)
+                save_response = serializer.save()
+                return Response(UserSerializerGet(save_response).data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     """delete user"""

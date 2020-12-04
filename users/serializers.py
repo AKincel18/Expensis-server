@@ -1,9 +1,10 @@
-from rest_framework import serializers
-from users.models import User
 from django.contrib.auth.hashers import make_password
+from rest_framework import serializers
+
+from users.models import User
 
 
-class UserSerializerBase(serializers.ModelSerializer):
+class UserSerializerPost(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = [
@@ -12,7 +13,7 @@ class UserSerializerBase(serializers.ModelSerializer):
             'gender',
             'birth_date',
             'monthly_limit',
-            'income_scope'
+            'income_range'
         ]
 
     def hash_password(self):
@@ -20,7 +21,7 @@ class UserSerializerBase(serializers.ModelSerializer):
         self.validated_data['password'] = make_password(password)
 
 
-class UserSerializerIdNoPassword(serializers.ModelSerializer):
+class UserSerializerGet(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = [
@@ -29,11 +30,11 @@ class UserSerializerIdNoPassword(serializers.ModelSerializer):
             'gender',
             'birth_date',
             'monthly_limit',
-            'income_scope'
+            'income_range'
         ]
 
 
-class UserSerializerNoPassword(serializers.ModelSerializer):
+class UserSerializerPut(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = [
@@ -41,5 +42,5 @@ class UserSerializerNoPassword(serializers.ModelSerializer):
             'gender',
             'birth_date',
             'monthly_limit',
-            'income_scope'
+            'income_range'
         ]
