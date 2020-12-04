@@ -3,9 +3,12 @@
 from django.db import migrations, models
 import django.db.models.deletion
 
+"""
+create table 'users_user'
+"""
+
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
@@ -22,7 +25,10 @@ class Migration(migrations.Migration):
                 ('gender', models.CharField(max_length=1)),
                 ('birth_date', models.DateField()),
                 ('monthly_limit', models.FloatField()),
-                ('income_scope', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='commons.incomeranges')),
+                ('income_scope',  models.ForeignKey(
+                    null=True,
+                    on_delete=django.db.models.deletion.SET_NULL,
+                    to='commons.incomeranges')),
             ],
         ),
     ]

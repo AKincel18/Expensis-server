@@ -2,9 +2,12 @@
 
 from django.db import migrations
 
+"""
+insert some initial data into commons tables 
+"""
+
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('commons', '0001_initial'),
     ]

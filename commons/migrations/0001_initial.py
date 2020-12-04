@@ -2,9 +2,14 @@
 
 from django.db import migrations, models
 
+"""
+create tables:  commons_ageranges, 
+                commons_categories,
+                commons_incomeranges
+"""
+
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
