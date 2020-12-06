@@ -1,4 +1,3 @@
-from django.http import HttpResponse
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -25,19 +24,27 @@ class UserDetail(APIView):
     """ get user by id """
 
     def get(self, request, user_id):
-        serializer = UserSerializerGet(get_user_by_id(user_id))
+        user = get_user_by_id(user_id)
+        if user is None:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        serializer = UserSerializerGet(user)
         return Response(serializer.data)
 
     """ update user """
 
     def put(self, request, user_id):
-        serializer = UserSerializerPost(get_user_by_id(user_id), data=request.data)
+        user = get_user_by_id(user_id)
+        if user is None:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        serializer = UserSerializerPost(user, data=request.data)
         if serializer.is_valid():
             serializer.hash_password()
             save_response = serializer.save()
             return Response(UserSerializerGet(save_response).data)
         else:
-            serializer = UserSerializerPut(get_user_by_id(user_id), data=request.data)
+            serializer = UserSerializerPut(user, data=request.data)
             if serializer.is_valid():
                 save_response = serializer.save()
                 return Response(UserSerializerGet(save_response).data)
@@ -46,5 +53,9 @@ class UserDetail(APIView):
     """delete user"""
 
     def delete(self, request, user_id):
-        get_user_by_id(user_id).delete()
-        return HttpResponse(status=status.HTTP_204_NO_CONTENT)
+        user = get_user_by_id(user_id)
+        if user is None:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        user.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)

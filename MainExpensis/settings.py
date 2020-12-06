@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'users.apps.UsersConfig',
     'commons.apps.CommonsConfig',
+    'expenses.apps.ExpensesConfig'
 ]
 
 CORS_ALLOWED_ORIGINS = ["http://localhost:4200"]
