@@ -5,27 +5,27 @@ from commons.models import IncomeRange, AgeRange, Category
 from commons.serializers import RangeSerializer, CategorySerializer
 
 
-# path: /incomeRanges/
+# path: /income-ranges/
 class GetIncomeRanges(APIView):
     """
     get all income ranges
     """
     def get(self, request):
-        incomeRanges = IncomeRange.objects.all()
+        income_ranges = IncomeRange.objects.all()
         RangeSerializer.Meta.model = IncomeRange
-        serializer = RangeSerializer(incomeRanges, many=True)
+        serializer = RangeSerializer(income_ranges, many=True)
         return Response(serializer.data)
 
 
-# path: /ageRanges/
+# path: /age-ranges/
 class GetAgeRanges(APIView):
     """
     get all age ranges
     """
     def get(self, request):
-        ageRanges = AgeRange.objects.all()
+        age_ranges = AgeRange.objects.all()
         RangeSerializer.Meta.model = AgeRange
-        serializer = RangeSerializer(ageRanges, many=True)
+        serializer = RangeSerializer(age_ranges, many=True)
         return Response(serializer.data)
 
 
