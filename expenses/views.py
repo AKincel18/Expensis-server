@@ -37,8 +37,8 @@ class ExpenseDetail(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     """delete expense"""
-    def delete(self, request, user_id):
-        expense = get_expense_by_id(user_id)
+    def delete(self, request, expense_id):
+        expense = get_expense_by_id(expense_id)
         if expense is None:
             return Response(status=status.HTTP_404_NOT_FOUND)
 

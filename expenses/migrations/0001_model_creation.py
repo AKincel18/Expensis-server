@@ -19,7 +19,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('date', models.DateTimeField(default=django.utils.timezone.now)),
-                ('title', models.CharField(max_length=80, null=True)),
+                ('title', models.CharField(max_length=80)),
                 ('description', models.CharField(blank=True, max_length=150, null=True)),
                 ('value', models.DecimalField(decimal_places=2, max_digits=19)),
                 ('category', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to='commons.category')),
