@@ -53,7 +53,7 @@ class RefreshToken(APIView):
             2. a header 'X-CSRFTOKEN' with a valid csrf token, client app can get it from cookies "csrftoken"
         '''
         User = get_user_model()
-        refresh_token = request.COOKIES.get('refreshtoken')
+        refresh_token = request.data.get('refresh_token')
         if refresh_token is None:
             raise exceptions.AuthenticationFailed(
                 'Authentication credentials were not provided.')
