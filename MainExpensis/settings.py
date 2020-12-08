@@ -12,7 +12,8 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 
 from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-from MainExpensis.database_config import DATABASE_CONFIG
+from MainExpensis.config.database_config import DATABASE_CONFIG
+from MainExpensis.config.host_config import HOST_CONFIG
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
@@ -24,7 +25,7 @@ SECRET_KEY = '$&g&u(fp55$rb)t^%tjy9beu(bg^vt*^#c&+33bxc42v90jl-k'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = HOST_CONFIG
 
 # Application definition
 
