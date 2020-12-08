@@ -13,7 +13,8 @@ class UserSerializerPost(serializers.ModelSerializer):
             'gender',
             'birth_date',
             'monthly_limit',
-            'income_range'
+            'income_range',
+            'username'
         ]
 
     def hash_password(self):

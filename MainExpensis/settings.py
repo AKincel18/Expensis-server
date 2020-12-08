@@ -40,10 +40,24 @@ INSTALLED_APPS = [
     'corsheaders',
     'users.apps.UsersConfig',
     'commons.apps.CommonsConfig',
-    'expenses.apps.ExpensesConfig'
+    'expenses.apps.ExpensesConfig',
+    'authentication.apps.AuthenticationConfig'
 ]
 
 CORS_ALLOWED_ORIGINS = ["http://localhost:4200"]
+CORS_ALLOW_CREDENTIALS = True  #to accept cookies via ajax request
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'authentication.authentication.SafeJWTAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated', # make all endpoints private
+    )
+}
+AUTH_USER_MODEL = 'users.User'
+REFRESH_TOKEN_SECRET = '*8QUOEgmO?NTVa|mU<S^Q7Q2_Ie5X|k>Td>KrWOu0W+2T(|5LIc(Q2_K;](S7>-'
+SECRET_KEY = "C*A+|:5*3})$xV)z1A[,CwF'J},fp>~D].Ql>w2H0>r03fxE[Z+HBE=#C[fg$Ei"
+
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',

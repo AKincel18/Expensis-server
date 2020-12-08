@@ -1,6 +1,11 @@
+from django.contrib.auth import get_user_model
+from django.views.decorators.csrf import ensure_csrf_cookie
 from rest_framework import status
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework import exceptions
 
 from users.serializers import UserSerializerPost, UserSerializerGet, UserSerializerPut
 from users.service import get_user_by_id
@@ -9,6 +14,7 @@ from users.service import get_user_by_id
 # path: /users/
 class SaveUser(APIView):
     """ create user """
+    permission_classes = [AllowAny]
 
     def post(self, request):
         serializer = UserSerializerPost(data=request.data)
