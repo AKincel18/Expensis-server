@@ -46,11 +46,11 @@ class RefreshToken(APIView):
     permission_classes = [AllowAny]
 
     def post(self, request):
-        '''
+        """
         To obtain a new access_token this view expects 2 important things:
             1. a cookie that contains a valid refresh_token
             2. a header 'X-CSRFTOKEN' with a valid csrf token, client app can get it from cookies "csrftoken"
-        '''
+        """
         User = get_user_model()
         refresh_token = request.data.get('refresh_token')
         if refresh_token is None:
