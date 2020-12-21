@@ -6,6 +6,8 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from MainExpensis import settings
+from MainExpensis.error_messages import user_not_found_error, wrong_password_error, username_password_required_error, \
+    auth_credentials_not_found_error, refresh_token_expired_error, user_is_inactive_error
 from authentication.utils import generate_access_token, generate_refresh_token
 from users.serializers import UserSerializerGet
 
@@ -19,14 +21,13 @@ class Authentication(APIView):
         password = request.data.get('password')
         response = Response()
         if (email is None) or (password is None):
-            raise exceptions.AuthenticationFailed(
-                'username and password required')
+            raise exceptions.AuthenticationFailed(username_password_required_error)
 
         user = User.objects.filter(email=email).first()
         if user is None:
-            raise exceptions.AuthenticationFailed('user not found')
+            raise exceptions.AuthenticationFailed(user_not_found_error)
         if not user.check_password(password):
-            raise exceptions.AuthenticationFailed('wrong password')
+            raise exceptions.AuthenticationFailed(wrong_password_error)
 
         serialized_user = UserSerializerGet(user).data
 
@@ -55,20 +56,19 @@ class RefreshToken(APIView):
         refresh_token = request.data.get('refresh_token')
         if refresh_token is None:
             raise exceptions.AuthenticationFailed(
-                'Authentication credentials were not provided.')
+                auth_credentials_not_found_error)
         try:
             payload = jwt.decode(
                 refresh_token, settings.REFRESH_TOKEN_SECRET, algorithms=['HS256'])
         except jwt.ExpiredSignatureError:
-            raise exceptions.AuthenticationFailed(
-                'expired refresh token, please login again.')
+            raise exceptions.AuthenticationFailed(refresh_token_expired_error)
 
         user = User.objects.filter(id=payload.get('user_id')).first()
         if user is None:
-            raise exceptions.AuthenticationFailed('User not found')
+            raise exceptions.AuthenticationFailed(user_not_found_error)
 
         if not user.is_active:
-            raise exceptions.AuthenticationFailed('user is inactive')
+            raise exceptions.AuthenticationFailed(user_is_inactive_error)
 
         access_token = generate_access_token(user)
         return Response({'access_token': access_token})
