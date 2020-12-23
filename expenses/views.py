@@ -5,10 +5,12 @@ from rest_framework.views import APIView
 from expenses.models import Expense
 from expenses.serializers import ExpenseSerializerPost, ExpenseSerializerGet
 from expenses.service import get_expense_by_id
+from users.service import get_user_by_auth_header
 
 
 class ExpenseList(APIView):
     """ Create a new expense """
+
     def post(self, request):
         serializer = ExpenseSerializerPost(data=request.data)
         if serializer.is_valid():
@@ -16,15 +18,21 @@ class ExpenseList(APIView):
             return Response(ExpenseSerializerGet(save_resp).data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    """ Get all expenses """
+    """ Get expenses by logged user"""
+
     def get(self, request):
-        expenses = Expense.objects.all()
+        user = get_user_by_auth_header(request.headers.get('Authorization'))  # get user by auth header
+        if user is None:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+        expenses = Expense.objects.filter(user=user)
         serializer = ExpenseSerializerGet(expenses, many=True)
         return Response(serializer.data)
 
 
 class ExpenseDetail(APIView):
     """ update expense """
+
     def put(self, request, expense_id):
         expense = get_expense_by_id(expense_id)
         if expense is None:
@@ -37,6 +45,7 @@ class ExpenseDetail(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     """delete expense"""
+
     def delete(self, request, expense_id):
         expense = get_expense_by_id(expense_id)
         if expense is None:
