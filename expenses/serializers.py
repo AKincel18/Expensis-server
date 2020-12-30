@@ -6,7 +6,6 @@ class ExpenseSerializerPost(serializers.ModelSerializer):
     class Meta:
         model = Expense
         fields = [
-            'user',
             'date',
             'title',
             'description',
