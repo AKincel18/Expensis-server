@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from users.serializers import UserSerializerPost, UserSerializerGet, UserSerializerPut
-from users.service import get_user_by_id
+from users.service import get_user_by_id, get_user_by_auth_header
 
 
 # path: /users/
@@ -20,23 +20,13 @@ class SaveUser(APIView):
             return Response(UserSerializerGet(save_response).data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-
-# path: /users/<id>
-class UserDetail(APIView):
-    """ get user by id """
-
-    def get(self, request, user_id):
-        user = get_user_by_id(user_id)
-        if user is None:
-            return Response(status=status.HTTP_404_NOT_FOUND)
-
-        serializer = UserSerializerGet(user)
-        return Response(serializer.data)
-
     """ update user """
 
-    def put(self, request, user_id):
-        user = get_user_by_id(user_id)
+    def put(self, request):
+        user = get_user_by_auth_header(request.headers.get('Authorization'))
+        if user is None:
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
+        user = get_user_by_id(user.id)
         if user is None:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
@@ -52,10 +42,26 @@ class UserDetail(APIView):
                 return Response(UserSerializerGet(save_response).data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+    """ get user details """
+
+    def get(self, request):
+        user = get_user_by_auth_header(request.headers.get('Authorization'))
+        if user is None:
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
+        user = get_user_by_id(user.id)
+        if user is None:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        serializer = UserSerializerGet(user)
+        return Response(serializer.data)
+
     """delete user"""
 
-    def delete(self, request, user_id):
-        user = get_user_by_id(user_id)
+    def delete(self, request):
+        user = get_user_by_auth_header(request.headers.get('Authorization'))
+        if user is None:
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
+        user = get_user_by_id(user.id)
         if user is None:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
