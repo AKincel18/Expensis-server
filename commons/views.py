@@ -1,10 +1,10 @@
-from rest_framework.decorators import permission_classes, authentication_classes
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from commons.models import IncomeRange, AgeRange, Category
+from commons.models import IncomeRange, Category
 from commons.serializers import RangeSerializer, CategorySerializer
+from commons.service import get_all_age_ranges
 
 
 # path: /income-ranges/
@@ -27,10 +27,7 @@ class GetAgeRanges(APIView):
     get all age ranges
     """
     def get(self, request):
-        age_ranges = AgeRange.objects.all()
-        RangeSerializer.Meta.model = AgeRange
-        serializer = RangeSerializer(age_ranges, many=True)
-        return Response(serializer.data)
+        return Response(get_all_age_ranges())
 
 
 # path: /categories/

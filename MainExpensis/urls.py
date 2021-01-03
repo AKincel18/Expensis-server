@@ -21,5 +21,6 @@ urlpatterns = [
     path('', include('users.urls')),
     path('', include('commons.urls')),
     path('', include('expenses.urls')),
-    path('', include('authentication.urls'))
+    path('', include('authentication.urls')),
+    path('', include('stats.urls'))
 ]
