@@ -33,3 +33,4 @@ class StatsName(Enum):
 
     CATEGORIES = "Categories"
     COMBINED = "Combined"
+    SEPARATED = "Separated"
