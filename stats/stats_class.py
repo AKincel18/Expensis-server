@@ -24,3 +24,12 @@ class ExpenseAction(Enum):
     CREATE = 1,
     UPDATE = 2,
     DELETE = 3
+
+
+class StatsName(Enum):
+
+    def __str__(self):
+        return str(self.value)
+
+    CATEGORIES = "Categories"
+    COMBINED = "Combined"

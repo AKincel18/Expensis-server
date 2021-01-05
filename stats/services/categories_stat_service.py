@@ -3,21 +3,16 @@ from django.db.models import Sum, Avg
 from commons.models import Category
 from expenses.models import Expense
 from stats.models import Stat
-from stats.services.update_stats_service import get_age_range_id_by_user_birth_date
+from stats.services.common_stats_service import get_age_range_id_by_user_birth_date, get_value_from_filtering
 from stats.stats_class import StatsResponse
-from users.service import get_user_by_auth_header
 
 
-def get_category_stats(auth_request, stats_request, filters):
-    user = get_user_by_auth_header(auth_request)
-    if user is None:
-        return Exception("kaj je user?")
-    print('name of stats = ' + stats_request.name)  # todo
-    filtered_stats = filter_stats(user, filters)
-    return get_average_category_stats(user, filtered_stats)
+def categories_stat(filters, user):
+    filtered_stat = filter_stat(user, filters)
+    return get_average_categories_stat(user, filtered_stat)
 
 
-def get_average_category_stats(user, filtered_stats):
+def get_average_categories_stat(user, filtered_stats):
     categories = Category.objects.all()
     response = list()
     for category in categories:
@@ -27,7 +22,7 @@ def get_average_category_stats(user, filtered_stats):
     return response
 
 
-def filter_stats(user, filters):
+def filter_stat(user, filters):
     stats = Stat.objects.all()
     if filters.income_range:
         stats = stats.filter(income_range=user.income_range)
@@ -41,19 +36,19 @@ def filter_stats(user, filters):
 
 def get_all_expenses_value_by_category(category, filtered_stats):
     all_value_filter = filtered_stats.filter(category=category).aggregate(Sum('value'))
-    return all_value_filter.get('value__sum') if all_value_filter.get('value__sum') is not None else 0
+    return get_value_from_filtering(all_value_filter.get('value__sum'))
 
 
 def get_expenses_average_value_by_user_and_category(user, category):
     user_value_filter = Expense.objects.filter(category=category, user=user).aggregate(Avg('value'))
-    return user_value_filter.get('value__avg') if user_value_filter.get('value__avg') is not None else 0
+    return get_value_from_filtering(user_value_filter.get('value__avg'))
 
 
 def get_all_expenses_average_value_by_and_category(category, filtered_stats):
     sum_value = get_all_expenses_value_by_category(category, filtered_stats)
     count_value_filter = filtered_stats.filter(category=category).aggregate(Sum('count'))
-    count_value = count_value_filter.get('count__sum')
-    if count_value is not None and count_value != 0:
+    count_value = get_value_from_filtering(count_value_filter.get('count__sum'))
+    if count_value != 0:
         return float(sum_value) / float(count_value)
     else:
         return 0.0
