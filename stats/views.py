@@ -10,7 +10,7 @@ from stats.services.generate_stat_service import generate_stat
 class GetStats(APIView):
     """ get stats by request params """
 
-    def get(self, request):
+    def post(self, request):
         main_serializer = StatsRequestSerializer(data=request.data)
         if main_serializer.is_valid():
             response = generate_stat(main_serializer, request.headers.get('Authorization'))
