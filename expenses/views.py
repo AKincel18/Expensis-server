@@ -29,7 +29,7 @@ class ExpenseList(APIView):
         if user is None:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
-        expenses = Expense.objects.filter(user=user).order_by('-value')
+        expenses = Expense.objects.filter(user=user).order_by('-date', '-id')
         serializer = ExpenseSerializerGet(expenses, many=True)
         return Response(serializer.data)
 
