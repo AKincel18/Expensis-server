@@ -5,6 +5,10 @@ from stats.services.common_stats_service import get_age_range_id_by_user_birth_d
 from stats.stats_class import ExpenseAction
 from users.service import get_user_by_id
 
+"""
+updating stats table after an expense was created or updated
+"""
+
 
 def update_stats_create_update(serializer, action, *args):
     user = get_user_by_id(serializer.get("user"))
@@ -25,6 +29,11 @@ def update_stats_create_update(serializer, action, *args):
         stat.value -= args[0]  # subtract the old value
         stat.value += value  # add the new value
     Stat.save(stat)
+
+
+"""
+updating stats table after an expense was deleted
+"""
 
 
 def update_stats_delete(expense):
