@@ -6,6 +6,8 @@ from MainExpensis.error_messages import expense_value_cannot_be_negative_error
 from expenses.models import Expense
 from expenses.serializers import ExpenseSerializerPost, ExpenseSerializerGet
 from expenses.service import get_expense_by_id
+from stats.services.update_stats_service import update_stats_delete, update_stats_create_update
+from stats.stats_class import ExpenseAction
 from users.service import get_user_by_auth_header
 
 
@@ -19,6 +21,7 @@ class ExpenseList(APIView):
                 return Response(status=status.HTTP_400_BAD_REQUEST, data=expense_value_cannot_be_negative_error)
             serializer.validated_data['user'] = get_user_by_auth_header(request.headers.get('Authorization'))
             save_resp = serializer.save()
+            update_stats_create_update(serializer.data, ExpenseAction.CREATE)
             return Response(ExpenseSerializerGet(save_resp).data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -41,10 +44,14 @@ class ExpenseDetail(APIView):
         expense = get_expense_by_id(expense_id)
         token_user = get_user_by_auth_header(request.headers.get('Authorization'))
         if expense is None or expense.user != token_user:
+        old_value = expense.value
+        if expense is None:
             return Response(status=status.HTTP_404_NOT_FOUND)
+
         serializer = ExpenseSerializerPost(expense, data=request.data)
         if serializer.is_valid():
             save_resp = serializer.save()
+            update_stats_create_update(serializer.data, ExpenseAction.UPDATE, old_value)
             return Response(ExpenseSerializerGet(save_resp).data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -55,6 +62,7 @@ class ExpenseDetail(APIView):
         if expense is None or expense.user != get_user_by_auth_header(request.headers.get('Authorization')):
             return Response(status=status.HTTP_404_NOT_FOUND)
         expense.delete()
+        update_stats_delete(expense)
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     def get(self, request, expense_id):
