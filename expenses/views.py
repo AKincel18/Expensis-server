@@ -43,9 +43,8 @@ class ExpenseDetail(APIView):
     def put(self, request, expense_id):
         expense = get_expense_by_id(expense_id)
         token_user = get_user_by_auth_header(request.headers.get('Authorization'))
-        if expense is None or expense.user != token_user:
         old_value = expense.value
-        if expense is None:
+        if expense is None or expense.user != token_user:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
         serializer = ExpenseSerializerPost(expense, data=request.data)
