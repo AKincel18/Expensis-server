@@ -11,10 +11,10 @@ updating stats table after an expense was created or updated
 
 
 def update_stats_create_update(serializer, action, *args):
-    user = get_user_by_id(serializer.get("user"))
-    category_id = serializer.get("category")
+    user = get_user_by_id(serializer.validated_data['user'].id)
+    category_id = serializer.data["category"]
     age_range_id = get_age_range_id_by_user_birth_date(user.birth_date)
-    value = Decimal(serializer.get("value"))
+    value = Decimal(serializer.data["value"])
 
     stat = Stat.objects.filter(
         income_range=user.income_range,
