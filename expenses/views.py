@@ -1,3 +1,7 @@
+import django.utils.timezone as timezone
+from django.core.paginator import Paginator
+from django.db.models import Sum
+from django.db.models.functions import Coalesce
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -31,10 +35,27 @@ class ExpenseList(APIView):
         user = get_user_by_auth_header(request.headers.get('Authorization'))  # get user by auth header
         if user is None:
             return Response(status=status.HTTP_400_BAD_REQUEST)
+        title_filter = request.GET.get(key='title', default='')
+        page_size_filter = request.GET.get(key='pageSize')
+        page_index_filter = request.GET.get(key='pageIndex')
+        year_filter = request.GET.get(key='year', default=timezone.now().year)
+        month_filter = request.GET.get(key='month', default=timezone.now().month)
 
-        expenses = Expense.objects.filter(user=user).order_by('-date', '-id')
+        expenses = Expense.objects.filter(user=user)
+        expenses = expenses.filter(title__icontains=title_filter)
+        expenses = expenses.filter(date__year=int(year_filter))
+        expenses = expenses.filter(date__month=int(month_filter))
+        max_expense_count = expenses.count()
+
+        expenses = expenses.order_by('-date', '-id')
+
+        if page_size_filter is not None and page_index_filter is not None:
+            paginator = Paginator(expenses, int(page_size_filter))
+            if int(page_index_filter) in paginator.page_range:
+                expenses = paginator.page(int(page_index_filter)).object_list
         serializer = ExpenseSerializerGet(expenses, many=True)
-        return Response(serializer.data)
+        headers = {'X-MAX-RESULTS': max_expense_count}
+        return Response(serializer.data, headers=headers)
 
 
 class ExpenseDetail(APIView):
@@ -71,3 +92,18 @@ class ExpenseDetail(APIView):
             return Response(status=status.HTTP_404_NOT_FOUND)
         serializer = ExpenseSerializerGet(expense)
         return Response(serializer.data)
+
+
+class MonthlyExpenseSum(APIView):
+
+    def get(self, request):
+        user = get_user_by_auth_header(request.headers.get('Authorization'))  # get user by auth header
+        if user is None:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        year_filter = request.GET.get(key='year', default=timezone.now().year)
+        month_filter = request.GET.get(key='month', default=timezone.now().month)
+
+        expenses = Expense.objects.filter(user=user)
+        expenses = expenses.filter(date__year=int(year_filter))
+        expenses = expenses.filter(date__month=int(month_filter))
+        return Response(expenses.aggregate(sum=Coalesce(Sum('value'), 0))['sum'])

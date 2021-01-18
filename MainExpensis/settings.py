@@ -14,6 +14,7 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 from MainExpensis.config.database_config import DATABASE_CONFIG
 from MainExpensis.config.host_config import HOST_CONFIG
+from corsheaders.defaults import default_headers
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
@@ -46,6 +47,9 @@ INSTALLED_APPS = [
 ]
 
 CORS_ALLOWED_ORIGINS = ["http://localhost:4200"]
+CORS_EXPOSE_HEADERS = [
+    'X-MAX-RESULTS'
+]
 CORS_ALLOW_CREDENTIALS = True  # to accept cookies via ajax request
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
