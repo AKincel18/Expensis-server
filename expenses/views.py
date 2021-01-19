@@ -21,7 +21,8 @@ class ExpenseList(APIView):
                 return Response(status=status.HTTP_400_BAD_REQUEST, data=expense_value_cannot_be_negative_error)
             serializer.validated_data['user'] = get_user_by_auth_header(request.headers.get('Authorization'))
             save_resp = serializer.save()
-            update_stats_create_update(serializer, ExpenseAction.CREATE)
+            if serializer.validated_data['user'].allow_data_collection:
+                update_stats_create_update(serializer, ExpenseAction.CREATE)
             return Response(ExpenseSerializerGet(save_resp).data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -44,6 +45,7 @@ class ExpenseDetail(APIView):
         expense = get_expense_by_id(expense_id)
         token_user = get_user_by_auth_header(request.headers.get('Authorization'))
         old_value = expense.value
+        old_category_id = expense.category_id
         if expense is None or expense.user != token_user:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
@@ -51,7 +53,7 @@ class ExpenseDetail(APIView):
         if serializer.is_valid():
             serializer.validated_data['user'] = expense.user
             save_resp = serializer.save()
-            update_stats_create_update(serializer, ExpenseAction.UPDATE, old_value)
+            update_stats_create_update(serializer, ExpenseAction.UPDATE, old_value, old_category_id)
             return Response(ExpenseSerializerGet(save_resp).data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -62,7 +64,8 @@ class ExpenseDetail(APIView):
         if expense is None or expense.user != get_user_by_auth_header(request.headers.get('Authorization')):
             return Response(status=status.HTTP_404_NOT_FOUND)
         expense.delete()
-        update_stats_delete(expense)
+        if expense.user.allow_data_collection:
+            update_stats_delete(expense)
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     def get(self, request, expense_id):

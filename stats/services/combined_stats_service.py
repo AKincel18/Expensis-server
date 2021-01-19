@@ -7,7 +7,7 @@ from stats.services.common_stats_service import get_age_range_id_by_user_birth_d
 from stats.stats_class import StatsResponse
 
 
-def combined_stat(filters, user):
+def combined_stats(filters, user):
     user_avg_filter = Expense.objects.filter(user=user).aggregate(Avg('value'))
     user_avg = round(get_value_from_filtering(user_avg_filter.get('value__avg')), 2)
     response = list()

@@ -1,12 +1,12 @@
 from stats.serializers import StatsFilteringSerializer
-from stats.services.combined_stat_service import combined_stat
-from stats.services.categories_stat_service import categories_stat
-from stats.services.separated_stat_service import separated_stat
+from stats.services.combined_stats_service import combined_stats
+from stats.services.categories_stats_service import categories_stats
+from stats.services.separated_stats_service import separated_stats
 from stats.stats_class import StatsRequest, StatsName, StatsFilters
 from users.service import get_user_by_auth_header
 
 
-def generate_stat(request_serializer, auth_request):
+def generate_stats(request_serializer, auth_request):
     user = get_user_by_auth_header(auth_request)
     if user is None:
         return Exception("kaj je user?")  # todo
@@ -16,8 +16,8 @@ def generate_stat(request_serializer, auth_request):
         filters = StatsFilters(filters_serializer.validated_data)
 
         if stats_request.name == StatsName.CATEGORIES.value:
-            return categories_stat(filters, user)
+            return categories_stats(filters, user)
         elif stats_request.name == StatsName.COMBINED.value:
-            return combined_stat(filters, user)
+            return combined_stats(filters, user)
         elif stats_request.name == StatsName.SEPARATED.value:
-            return separated_stat(filters, user)
+            return separated_stats(filters, user)

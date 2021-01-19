@@ -15,3 +15,4 @@ class User(AbstractUser):
         on_delete=models.SET_NULL,
         null=True
     )
+    allow_data_collection = models.BooleanField(default=False)
