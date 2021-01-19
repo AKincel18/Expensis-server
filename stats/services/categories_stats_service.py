@@ -2,17 +2,17 @@ from django.db.models import Sum, Avg
 
 from commons.models import Category
 from expenses.models import Expense
-from stats.models import Stat
+from stats.models import Stats
 from stats.services.common_stats_service import get_age_range_id_by_user_birth_date, get_value_from_filtering
 from stats.stats_class import StatsResponse
 
 
-def categories_stat(filters, user):
-    filtered_stat = filter_stat(user, filters)
-    return get_average_categories_stat(user, filtered_stat)
+def categories_stats(filters, user):
+    filtered_stats = filter_stats(user, filters)
+    return get_average_categories_stats(user, filtered_stats)
 
 
-def get_average_categories_stat(user, filtered_stats):
+def get_average_categories_stats(user, filtered_stats):
     categories = Category.objects.all()
     response = list()
     for category in categories:
@@ -22,8 +22,8 @@ def get_average_categories_stat(user, filtered_stats):
     return response
 
 
-def filter_stat(user, filters):
-    stats = Stat.objects.all()
+def filter_stats(user, filters):
+    stats = Stats.objects.all()
     if filters.income_range:
         stats = stats.filter(income_range=user.income_range)
     if filters.age_range:

@@ -7,7 +7,7 @@ from rest_framework.response import Response
 
 from commons.models import Category
 from expenses.models import Expense
-from stats.models import Stat
+from stats.models import Stats
 from stats.services.common_stats_service import get_age_range_id_by_user_birth_date
 from users.service import get_user_by_id
 
@@ -41,13 +41,13 @@ def generate_expenses_testing():
 def update_stats_testing(expense):
     age_range_id = get_age_range_id_by_user_birth_date(expense.user.birth_date)
     value = Decimal(expense.value)
-    stat = Stat.objects.filter(
+    stats = Stats.objects.filter(
         income_range=expense.user.income_range,
         age_range=age_range_id,
         category=expense.category.id,
         gender=expense.user.gender
     ).first()
 
-    stat.value += value
-    stat.count += 1
-    Stat.save(stat)
+    stats.value += value
+    stats.count += 1
+    Stats.save(stats)
