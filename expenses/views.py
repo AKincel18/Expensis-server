@@ -41,10 +41,10 @@ class ExpenseList(APIView):
         year_filter = request.GET.get(key='year', default=timezone.now().year)
         month_filter = request.GET.get(key='month', default=timezone.now().month)
 
-        expenses = Expense.objects.filter(user=user)
-        expenses = expenses.filter(title__icontains=title_filter)
-        expenses = expenses.filter(date__year=int(year_filter))
-        expenses = expenses.filter(date__month=int(month_filter))
+        expenses = Expense.objects.filter(user=user,
+                                          title__icontains=title_filter,
+                                          date__year=int(year_filter),
+                                          date__month=int(month_filter))
         max_expense_count = expenses.count()
 
         expenses = expenses.order_by('-date', '-id')
