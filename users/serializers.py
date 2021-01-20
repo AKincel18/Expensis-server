@@ -33,7 +33,7 @@ class UserSerializerGet(serializers.ModelSerializer):
             'birth_date',
             'monthly_limit',
             'income_range',
-            'date_joined'
+            'date_joined',
             'allow_data_collection'
         ]
 
