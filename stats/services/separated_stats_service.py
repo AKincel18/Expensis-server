@@ -7,18 +7,18 @@ from stats.services.common_stats_service import get_value_from_filtering, get_av
 from stats.stats_class import StatsResponse
 
 
-def separated_stat(filters, user):
+def separated_stats(filters, user):
     user_avg_filter = Expense.objects.filter(user=user).aggregate(Avg('value'))
     user_avg = round(get_value_from_filtering(user_avg_filter.get('value__avg')), 2)
     if filters.income_range:
-        return income_range_separated_stat(user.income_range.id, user_avg)
+        return income_range_separated_stats(user.income_range.id, user_avg)
     elif filters.age_range:
-        return age_range_separated_stat(user.birth_date, user_avg)
+        return age_range_separated_stats(user.birth_date, user_avg)
     elif filters.gender:
-        return gender_separated_stat(user.gender, user_avg)
+        return gender_separated_stats(user.gender, user_avg)
 
 
-def income_range_separated_stat(user_income_range_id, user_avg):
+def income_range_separated_stats(user_income_range_id, user_avg):
     income_ranges = get_all_income_ranges()
     response = list()
     for income_range in income_ranges:
@@ -32,7 +32,7 @@ def income_range_separated_stat(user_income_range_id, user_avg):
     return response
 
 
-def age_range_separated_stat(user_birth_date, user_avg):
+def age_range_separated_stats(user_birth_date, user_avg):
     age_ranges = get_all_age_ranges()
     user_age_range_id = get_age_range_id_by_user_birth_date(user_birth_date)
     response = list()
@@ -47,7 +47,7 @@ def age_range_separated_stat(user_birth_date, user_avg):
     return response
 
 
-def gender_separated_stat(user_gender, user_avg):
+def gender_separated_stats(user_gender, user_avg):
     response = list()
     for gender in ['F', 'M']:
         full_gender = full_gender_name(gender)

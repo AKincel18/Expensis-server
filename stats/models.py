@@ -1,7 +1,7 @@
 from django.db import models
 
 
-class Stat(models.Model):
+class Stats(models.Model):
     income_range = models.ForeignKey('commons.IncomeRange', on_delete=models.SET_NULL, null=True)
     age_range = models.ForeignKey('commons.AgeRange', on_delete=models.SET_NULL, null=True)
     category = models.ForeignKey('commons.Category', on_delete=models.SET_NULL, null=True)

@@ -18,7 +18,7 @@ procedure_body = "create or replace procedure fill_stats_table() language plpgsq
                         "else " \
                         "genderValue := 'M'; " \
                     "end if; " \
-                        "insert into stats_stat (income_range_id, age_range_id, category_id, gender, value, count)  " \
+                        "insert into stats_stats (income_range_id, age_range_id, category_id, gender, value, count)  " \
                         "values (income_range.id, age_range.id, category.id, genderValue, 0, 0); " \
                 "end loop; " \
             "end loop; " \

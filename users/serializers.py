@@ -14,7 +14,8 @@ class UserSerializerPost(serializers.ModelSerializer):
             'birth_date',
             'monthly_limit',
             'income_range',
-            'username'
+            'username',
+            'allow_data_collection'
         ]
 
     def hash_password(self):
@@ -32,7 +33,8 @@ class UserSerializerGet(serializers.ModelSerializer):
             'birth_date',
             'monthly_limit',
             'income_range',
-            'date_joined'
+            'date_joined',
+            'allow_data_collection'
         ]
 
 
@@ -44,5 +46,6 @@ class UserSerializerPut(serializers.ModelSerializer):
             'gender',
             'birth_date',
             'monthly_limit',
-            'income_range'
+            'income_range',
+            'allow_data_collection'
         ]
