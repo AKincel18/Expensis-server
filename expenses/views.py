@@ -21,7 +21,7 @@ class ExpenseList(APIView):
     def post(self, request):
         serializer = ExpenseSerializerPost(data=request.data)
         if serializer.is_valid():
-            if serializer.validated_data['value'] < 0:
+            if serializer.validated_data['value'] <= 0:
                 return Response(status=status.HTTP_400_BAD_REQUEST, data=expense_value_cannot_be_negative_error)
             serializer.validated_data['user'] = get_user_by_auth_header(request.headers.get('Authorization'))
             save_resp = serializer.save()
@@ -72,9 +72,12 @@ class ExpenseDetail(APIView):
 
         serializer = ExpenseSerializerPost(expense, data=request.data)
         if serializer.is_valid():
+            if serializer.validated_data['value'] <= 0:
+                return Response(status=status.HTTP_400_BAD_REQUEST, data=expense_value_cannot_be_negative_error)
             serializer.validated_data['user'] = expense.user
             save_resp = serializer.save()
-            update_stats_create_update(serializer, ExpenseAction.UPDATE, old_value, old_category_id)
+            if expense.user.allow_data_collection:
+                update_stats_create_update(serializer, ExpenseAction.UPDATE, old_value, old_category_id)
             return Response(ExpenseSerializerGet(save_resp).data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
