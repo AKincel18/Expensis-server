@@ -54,16 +54,3 @@ class SaveUser(APIView):
 
         serializer = UserSerializerGet(user)
         return Response(serializer.data)
-
-    """delete user"""
-
-    def delete(self, request):
-        user = get_user_by_auth_header(request.headers.get('Authorization'))
-        if user is None:
-            return Response(status=status.HTTP_401_UNAUTHORIZED)
-        user = get_user_by_id(user.id)
-        if user is None:
-            return Response(status=status.HTTP_404_NOT_FOUND)
-
-        user.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)

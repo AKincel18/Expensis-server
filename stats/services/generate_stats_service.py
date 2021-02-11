@@ -9,7 +9,7 @@ from users.service import get_user_by_auth_header
 def generate_stats(request_serializer, auth_request):
     user = get_user_by_auth_header(auth_request)
     if user is None:
-        return Exception("kaj je user?")  # todo
+        return Exception("User not found.")
     filters_serializer = StatsFilteringSerializer(data=request_serializer.data.get('filters'))
     if filters_serializer.is_valid():
         stats_request = StatsRequest(request_serializer.validated_data)
