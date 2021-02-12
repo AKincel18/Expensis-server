@@ -58,6 +58,8 @@ Used to gain or refresh access token.
 }
 ```
 
+***
+
 **Condition:** If given password is incorrect.
 
 **Code:** `403 Forbidden`
@@ -69,6 +71,9 @@ Used to gain or refresh access token.
     "detail": "Wrong password"
 }
 ```
+
+***
+
 **Condition:** If there is no email or password given.
 
 **Code:** `403 Forbidden`
@@ -118,6 +123,8 @@ Used to gain or refresh access token.
 }
 ```
 
+***
+
 **Condition:** If no refresh token given.
 
 **Code:** `403 Forbidden`
@@ -129,6 +136,9 @@ Used to gain or refresh access token.
     "detail": "Authentication credentials were not provided"
 }
 ```
+
+***
+
 **Condition:** If user coded in token is not in database.
 
 **Code:** `403 Forbidden`
@@ -140,6 +150,9 @@ Used to gain or refresh access token.
     "detail": "Authentication credentials were not provided"
 }
 ```
+
+***
+
 **Condition:** If user coded in token is inactive.
 
 **Code:** `403 Forbidden`
