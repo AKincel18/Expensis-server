@@ -2,20 +2,20 @@
 Expensis is open-source project created to control Your finances.  
 This repository is server part - created using Python and Django.  
 It consists of multiple REST API endpoints. It is divided into 5 applications - each with its own documentation:
-* **expenses** - managing expenses, [*docs*](https://github.com/PKapski/Expensis-server/tree/development/expenses#expenses)
-* **stats** - fetching data to analyze expenses, [*docs*](https://github.com/PKapski/Expensis-server/tree/development/stats#stats)
-* **authentication** - used for user authentication, [*docs*](https://github.com/PKapski/Expensis-server/tree/development/authentication#authentication)
-* **users** - managing user account, [*docs*](https://github.com/PKapski/Expensis-server/tree/development/users#users)
-* **commons** - fetching static data like: income ranges, age ranges and categories, [*docs*](https://github.com/PKapski/Expensis-server/tree/development/commons#commons)
+* **expenses** - managing expenses, [*docs*](https://github.com/AKincel18/Expensis-server/tree/development/expenses#expenses)
+* **stats** - fetching data to analyze expenses, [*docs*](https://github.com/AKincel18/Expensis-server/tree/development/stats#stats)
+* **authentication** - used for user authentication, [*docs*](https://github.com/AKincel18/Expensis-server/tree/development/authentication#authentication)
+* **users** - managing user account, [*docs*](https://github.com/AKincel18/Expensis-server/tree/development/users#users)
+* **commons** - fetching static data like: income ranges, age ranges and categories, [*docs*](https://github.com/AKincel18/Expensis-server/tree/development/commons#commons)
 
 Expensis consists of two clients:
-* Web application created with Angular, [*link*](https://github.com/PKapski/Expensis-web-client)
-* Mobile application created using Android Studio and Kotlin language, [*link*](https://github.com/PKapski/Expensis-mobile)
+* Web application created with Angular, [*link*](https://github.com/AKincel18/Expensis-web-client)
+* Mobile application created using Android Studio and Kotlin language, [*link*](https://github.com/AKincel18/Expensis-mobile)
 
 ## Setting up project
 
 **1. Clone the repository**  
-`git clone https://github.com/PKapski/Expensis-server.git`
+`git clone https://github.com/AKincel18/Expensis-server.git`
 
 **2. Create your own virtual environment**
 ```

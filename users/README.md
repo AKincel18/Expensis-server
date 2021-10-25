@@ -76,7 +76,7 @@ GET and PUT endpoints are always in context of current logged-in user, taken fro
   *Format:* yyyy-MM-dd  
 * **monthly_limit** - user monthly expenses value limit  
   *Required:* false  
-* **income_range** - id of the [income range](https://github.com/PKapski/Expensis-server/tree/development/commons#1-income-ranges)  
+* **income_range** - id of the [income range](https://github.com/AKincel18/Expensis-server/tree/development/commons#1-income-ranges)  
   *Required:* true  
 * **username** - user's username  
   *Required:* true  
@@ -181,7 +181,7 @@ GET and PUT endpoints are always in context of current logged-in user, taken fro
   *Format:* yyyy-MM-dd  
 * **monthly_limit** - user monthly expenses value limit  
   *Required:* false  
-* **income_range** - id of the [income range](https://github.com/PKapski/Expensis-server/tree/development/commons#1-income-ranges)  
+* **income_range** - id of the [income range](https://github.com/AKincel18/Expensis-server/tree/development/commons#1-income-ranges)  
   *Required:* true
 * **allow_data_collection** - determines if user allows application to collect his data to create statistics.
   If set to false, user won't be allowed to use statistics functionality.  

@@ -87,7 +87,7 @@ Every endpoint listed here is in context of user, which is taken from Bearer tok
 * **description** - expense description  
   *Required:* false  
   *Max length:* 150
-* **category** - id of the expense [category](https://github.com/PKapski/Expensis-server/tree/development/commons#3-categories)  
+* **category** - id of the expense [category](https://github.com/AKincel18/Expensis-server/tree/development/commons#3-categories)  
   *Required:* true  
 * **value** - expense value  
   *Required:* true  
@@ -224,7 +224,7 @@ Every endpoint listed here is in context of user, which is taken from Bearer tok
 * **description** - expense description  
   *Required:* false  
   *Max length:* 150
-* **category** - id of the expense [category](https://github.com/PKapski/Expensis-server/tree/development/commons#3-categories)  
+* **category** - id of the expense [category](https://github.com/AKincel18/Expensis-server/tree/development/commons#3-categories)  
   *Required:* true  
 * **value** - expense value  
   *Required:* true  
